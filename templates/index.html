@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartDesk AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <h1>SmartDesk AI</h1>
+        <p>Professional IT Help Desk Ticket Analyzer</p>
+    </div>
+
+    <div class="container">
+
+        <a href="/dashboard" class="nav-link">View Dashboard →</a>
+
+        <div class="card">
+            <h2 class="section-title">Analyze a Support Ticket</h2>
+
+            <p class="description">
+                Paste a student support ticket or email below. SmartDesk AI will analyze the message,
+                detect the issue category, assign a priority level, suggest the correct support team,
+                and generate a professional email response.
+            </p>
+
+            {% if error_message %}
+            <div class="error-box">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                <label>Student ticket/message:</label>
+
+                <textarea name="ticket_message" placeholder="Example cases you can test:
+
+MFA reset - I changed my phone and cannot approve my sign-in.
+Password reset - I forgot my password.
+Account locked - My account is locked.
+Email issue - I cannot access my email.
+Course access issue - I cannot access my course.
+Software issue - The app is not opening.
+Storage issue - My cloud storage is full.
+VPN / Wi-Fi issue - I cannot connect to VPN.
+Suspicious email - I received a suspicious email.
+Unclear issue - I can't get in, it says error.">{{ ticket_message }}</textarea>
+
+                <button type="submit">Analyze Ticket</button>
+            </form>
+        </div>
+
+        {% if result %}
+        <div class="card">
+            <h2 class="results-title">Analysis Result</h2>
+
+            <div class="result-grid">
+                <div class="result-box">
+                    <h3>Category</h3>
+                    <p>{{ result.category }}</p>
+                </div>
+
+                <div class="result-box">
+                    <h3>Priority</h3>
+                    <p class="priority-{{ result.priority.lower() }}">{{ result.priority }}</p>
+                </div>
+
+            </div>
+
+            <div class="confidence-box">
+                <h3>AI Analysis Details</h3>
+                <p><strong>Confidence Score:</strong> {{ result.confidence_score }}</p>
+
+                {% if result.matched_keywords %}
+                <p><strong>Matched Keywords:</strong> {{ result.matched_keywords | join(", ") }}</p>
+                {% else %}
+                <p><strong>Matched Keywords:</strong> No strong keywords matched.</p>
+                {% endif %}
+            </div>
+
+            <h3 class="reply-heading">Suggested Reply</h3>
+
+            <button type="button" class="copy-btn" onclick="copyReply()">Copy Suggested Reply</button>
+
+            <div class="reply-box" id="replyText">{{ result.reply }}</div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="footer">
+        SmartDesk AI | Built with Python, Flask, and SQLite
+    </div>
+
+    <script>
+        function copyReply() {
+            const replyText = document.getElementById("replyText").innerText;
+            navigator.clipboard.writeText(replyText);
+            alert("Suggested reply copied!");
+        }
+    </script>
+</body>
+</html>
