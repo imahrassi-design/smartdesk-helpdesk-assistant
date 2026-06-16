@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SmartDesk AI</title>
+    <title>Help Desk </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <div class="header">
-        <h1>SmartDesk AI</h1>
-        <p>Professional IT Help Desk Ticket Analyzer</p>
+        <h1>SmartDesk</h1>
+        <p>Ticket Analyzer</p>
     </div>
 
     <div class="container">
@@ -19,7 +19,7 @@
             <h2 class="section-title">Analyze a Support Ticket</h2>
 
             <p class="description">
-                Paste a student support ticket or email below. SmartDesk AI will analyze the message,
+                Paste a student support ticket or email below. SmartDesk will analyze the message,
                 detect the issue category, assign a priority level, suggest the correct support team,
                 and generate a professional email response.
             </p>
@@ -88,9 +88,6 @@ Unclear issue - I can't get in, it says error.">{{ ticket_message }}</textarea>
 
     </div>
 
-    <div class="footer">
-        SmartDesk AI | Built with Python, Flask, and SQLite
-    </div>
 
     <script>
         function copyReply() {
