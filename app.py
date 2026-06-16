@@ -29,7 +29,7 @@ class Ticket(db.Model):
 
 
 def add_status_column_if_missing():
-    db_path = os.path.join("instance", "tickets.db")
+    db_path = os.path.join(app.instance_path, "tickets.db")
 
     if not os.path.exists(db_path):
         return
@@ -63,10 +63,10 @@ def home():
 
             new_ticket = Ticket(
                 message=ticket_message,
-                category=result["category"],
-                priority=result["priority"],
-                team=result["team"],
-                reply=result["reply"],
+                category=result.get("category", "Unknown"),
+                priority=result.get("priority", "Medium"),
+                team=result.get("team", "IT Service Desk"),
+                reply=result.get("reply", ""),
                 status="Open"
             )
 
@@ -203,14 +203,24 @@ def export_tickets():
         ])
 
     response = Response(output.getvalue(), mimetype="text/csv")
-    response.headers["Content-Disposition"] = "attachment; filename=smartdesk_tickets.csv"
+    response.headers["Content-Disposition"] = "attachment; filename=helpdesk_tickets.csv"
 
     return response
 
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        add_status_column_if_missing()
+@app.route("/health")
+def health():
+    return "HelpDesk Case Assistant is running."
 
-    app.run(debug=True)
+
+# IMPORTANT:
+# This must be outside __main__ so Render/Gunicorn creates the database table.
+with app.app_context():
+    db.create_all()
+    add_status_column_if_missing()
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
+PY
