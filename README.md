@@ -6,7 +6,7 @@ HelpDesk Case Assistant is a Flask web application that analyzes IT help desk su
 
 Try the live project here:
 
-PASTE-YOUR-LIVE-LINK-HERE
+https://support-ticket-analyzer.onrender.com
 
 ## Project Overview
 
